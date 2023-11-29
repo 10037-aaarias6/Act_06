@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Aplicación de Clima</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h1>Aplicación de Clima</h1>
+
+  <form id="weather-form">
+    <label for="city-input">Ciudad:</label>
+    <input type="text" id="city-input" required>
+    <button type="submit">Obtener Clima</button>
+  </form>
+
+  <div id="weather-info"></div>
+
+  <script>
+
+    // Función para obtener el clima de OpenWeatherMap
+    function getWeather(city) {
+      var apiKey = '9305cc873974f7e312616b805c94ef9d'; // Reemplaza con tu propia API key de OpenWeatherMap
+      var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + apiKey;
+
+      $.getJSON(apiUrl, function(data) {
+        var weatherDescription = data.weather[0].description;
+        var temperatureInKelvin = data.main.temp;
+        var temperatureInCelsius = temperatureInKelvin - 273.15; // Convertir de Kelvin a Celsius
+        var humidity = data.main.humidity;
+
+        var weatherInfo = 'Descripción del clima: ' + weatherDescription + '<br>';
+        weatherInfo += 'Temperatura: ' + temperatureInCelsius.toFixed(2) + '°C<br>'; // Usar toFixed(2) para redondear a 2 decimales
+        weatherInfo += 'Humedad: ' + humidity + '%';
+        //Velocidad del viento
+        var windSpeed = data.wind.speed;
+        weatherInfo += '<br>Velocidad del viento: ' + windSpeed + 'm/s';
+        //Presión atmosférica
+        var pressure = data.main.pressure;
+        weatherInfo += '<br>Presión atmosférica: ' + pressure + 'hPa';
+        //Temperatura máxima
+        var maxTemp = data.main.temp_max;
+        weatherInfo += '<br>Temperatura máxima: ' + maxTemp + '°C';
+        //Temperatura mínima
+        var minTemp = data.main.temp_min;
+        weatherInfo += '<br>Temperatura mínima: ' + minTemp + '°C';
+        //Latitud
+        var latitud = data.coord.lat;
+        weatherInfo += '<br>Latitud: ' + latitud;
+        //Longitud
+        var longitud = data.coord.lon;
+        weatherInfo += '<br>Longitud: ' + longitud;
+        //Amanece a las
+        var sunrise = data.sys.sunrise;
+        weatherInfo += '<br>Amanece a las: ' + sunrise;
+        //Oscurece a las
+        var sunset = data.sys.sunset;
+        weatherInfo += '<br>Oscurece a las: ' + sunset;
+        //Visibilidad
+        var visibility = data.visibility;
+        weatherInfo += '<br>Visibilidad: ' + visibility + 'm';
+        //Hora de la medida
+        var horaMedida = data.dt;
+        weatherInfo += '<br>Hora de la medida: ' + horaMedida;
+        //Fecha de la medida
+        var fechaMedida = data.dt;
+        weatherInfo += '<br>Fecha de la medida: ' + fechaMedida;
+        //Zona horaria
+        var zonaHoraria = data.timezone;
+        weatherInfo += '<br>Zona horaria: ' + zonaHoraria;
+        //ID de la ciudad
+        var idCiudad = data.id;
+        weatherInfo += '<br>ID de la ciudad: ' + idCiudad;
+        //Código de país
+        var codPais = data.sys.country;
+        weatherInfo += '<br>Código de país: ' + codPais;
+
+        $('#weather-info').html(weatherInfo);
+      });
+    }
+
+    // Manejador de evento para el formulario de clima
+    $('#weather-form').submit(function(event) {
+      event.preventDefault();
+      var city = $('#city-input').val();
+      getWeather(city);
+
+
+      
+    });
+
+  </script>
+</body>
+</html>
